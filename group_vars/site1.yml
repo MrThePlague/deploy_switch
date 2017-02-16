@@ -1,0 +1,14 @@
+---
+# Site specific variables
+
+switches:
+  - hostname: 4500
+    vlans:
+      - number: 10
+        name: Test_10
+        ip_address: 10.4.10.1
+        subnet_mask: 255.255.255.0
+      - number: 20
+        name: Test_20
+        ip_address: 10.4.20.1
+        subnet_mask: 255.255.255.0

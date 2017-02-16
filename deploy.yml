@@ -4,10 +4,11 @@
 
   vars_files:
   - group_vars/all
+  - group_vars/site1.yml
 
   vars:
     cli:
-      host: "{{ ansible_host }}"
+      host: "{{ device_ip }}"
       username: cisco
       password: cisco
       authorize: yes
@@ -18,13 +19,17 @@
 
   - name: Gather facts
     ios_facts:
-      host: "{{ ansible_host }}"
+      host: "{{ device_ip }}"
       provider: "{{ cli }}"
+    register: result
+
+  - debug: var=result
 
   - name: Configure device hostname
     ios_config:
-      lines: hostname {{ inventory_hostname }}
+      lines: hostname {{ item[switches].hostname }}
       provider: "{{ cli }}"
+    with_items: switches
 
   - name: Service configuration
     ios_config:
@@ -61,7 +66,7 @@
         - logging rate-limit 10 except critical
       provider: "{{ cli }}"
 
-# This section needs to be made idempotent, as currently, if you change the variable the device just appends additional syslog servers
+# This section needs to be made idempotent, as currently, if you change the variable the device just appends additional Syslog servers
 
   - name: Syslog Server
     ios_config:
